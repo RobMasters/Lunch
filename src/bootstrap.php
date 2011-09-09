@@ -8,12 +8,24 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+$app['debug'] = true;
+
 $app->register(new Silex\Extension\TwigExtension(), array(
     'twig.path'       => __DIR__.'/../views',
-    'twig.class_path' => __DIR__.'/../vendor/twig/lib',
+    'twig.class_path' => __DIR__.'/../vendor/Twig/lib',
 ));
 
 $app->register(new Silex\Extension\UrlGeneratorExtension());
+
+$app->register(new Silex\Extension\DoctrineExtension(), array(
+    'db.options'            => array(
+        'driver'    => 'pdo_sqlite',
+        'path'      => __DIR__.'/lunch.sqlite',
+    ),
+    'db.dbal.class_path'    => __DIR__.'/../vendor/doctrine-dbal/lib',
+    'db.common.class_path'  => __DIR__.'/../vendor/doctrine-common/lib',
+));
+
 
 $app->error(function (\Exception $e) use ($app) {
     if ($e instanceof NotFoundHttpException) {
