@@ -1,7 +1,26 @@
 {% extends "base.html.twig" %}
 
 {% block content %}
-	{% for user in users %}
-		{{ user.name }}<br />
-	{% endfor %}
+	<form method="post" action="{{ app.url_generator.generate('buy_lunch') }}">
+		<table id="lunchers">
+			<tr>
+				<th>Buyer</th>
+				<th>Eater(s)</th>
+				<th>Debt</th>
+				<th>Last bought</th>
+			</tr>
+			{% for user in users %}
+				{% set due = (turn == user.id) %}
+				<tr {{ due ? 'class="due"' : '' }}>
+					<td class="buyer">
+						<label><input type="radio" name="user_id" value="{{ user.id }}" {{ due ? 'checked="checked"' : '' }} /> {{ user.name }}</label>
+					</td>
+					<td class="eaters"><input type="checkbox" name="benefactors[]" value="{{ user.id }}" /></td>
+					<td class="debt">{{ user.debt }}</td>
+					<td class="last-bought">{{ user.last_bought }}</td>
+				</tr>
+			{% endfor %}
+		</table>
+		<input type="submit" value="Save lunch trip" name="submit" />
+	</form>
 {% endblock %}

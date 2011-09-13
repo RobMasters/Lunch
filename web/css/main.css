@@ -1,0 +1,18 @@
+#lunchers {
+	margin-bottom: 10px;
+	border: 1px solid #666;
+}
+
+#lunchers th {
+	padding: 0 20px;
+	background-color: lightSlateGrey;
+	color: #fff;
+}
+
+#lunchers td.eaters, #lunchers td.debt {
+	text-align: center;
+}
+
+#lunchers tr.due {
+	background-color: LightSteelBlue;
+}

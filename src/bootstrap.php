@@ -18,9 +18,9 @@ $app->register(new Silex\Extension\TwigExtension(), array(
 $app->register(new Silex\Extension\UrlGeneratorExtension());
 
 $app->register(new Silex\Extension\DoctrineExtension(), array(
-    'db.options'            => array(
-        'driver'    => 'pdo_sqlite',
-        'path'      => __DIR__.'/lunch.sqlite',
+    'db.options' => array(
+        'driver' => 'pdo_sqlite',
+        'path'   => __DIR__.'/lunch.sqlite',
     ),
     'db.dbal.class_path'    => __DIR__.'/../vendor/doctrine-dbal/lib',
     'db.common.class_path'  => __DIR__.'/../vendor/doctrine-common/lib',
@@ -28,15 +28,19 @@ $app->register(new Silex\Extension\DoctrineExtension(), array(
 
 
 $app->error(function (\Exception $e) use ($app) {
+	if ($app['debug']) {
+        return;
+    }
+	
+    // Even in production, just show the exception...
     if ($e instanceof NotFoundHttpException) {
-        return $app['twig']->render('error.twig', array(
+        return $app['twig']->render('error.html.twig', array(
             'code' => 404,
             'message' => 'The requested page could not be found.',
         ));
     }
-
     $code = ($e instanceof HttpException) ? $e->getStatusCode() : 500;
-    return $app['twig']->render('error.twig', array(
+    return $app['twig']->render('error.html.twig', array(
         'code' => $code,
         'message' => $e,
     ));
